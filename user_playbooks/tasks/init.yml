@@ -1,0 +1,25 @@
+---
+
+- name: apt update to the latest
+  block:
+    - name: apt update
+      # http://docs.ansible.com/ansible/latest/apt_module.html
+      apt:
+        update_cache: yes
+    - name: install aptitude
+      apt:
+        name: aptitude
+    - name: apt update, upgrade
+      apt:
+        upgrade: full
+        update_cache: yes
+  become: true
+
+- name: install utilities
+  apt:
+    name:
+      - build-essential
+      - rsync
+  become: true
+
+...

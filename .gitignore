@@ -11,7 +11,7 @@ repo
 # Ansible
 *.retry
 *.pyc
-user_playbooks
+#user_playbooks
 playbooks/galaxy_roles
 requirements.yml
 
@@ -19,6 +19,6 @@ requirements.yml
 .vagrant
 boxes.yaml
 vagrant/Gemfile.lock
-vagrant/settings.yaml
-vagrant/boxes.d/*-local.yaml
+#vagrant/settings.yaml
+#vagrant/boxes.d/*-local.yaml
 vagrant/boxes.d/80-tmp-*.yaml

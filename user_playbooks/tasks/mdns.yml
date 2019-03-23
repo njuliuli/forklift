@@ -1,0 +1,16 @@
+---
+
+- name: install and set up mDNS
+  block:
+    # sudo apt install avahi-daemon avahi-discover libnss-mdns
+    # https://wiki.debian.org/ZeroConf
+    - name: install mDNS
+      apt:
+        name: [avahi-daemon, avahi-discover, libnss-mdns]
+    - name: ensure avahi-daemon.service for mDNS is running
+      service:
+        name: avahi-daemon.service
+        state: started
+  become: true
+
+...

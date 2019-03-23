@@ -1,0 +1,12 @@
+---
+
+- name: install ssh public key into VM
+  authorized_key:
+    # # I hardcode user, since ansible_user turns out to be the host user, not guest user
+    # user: "{{ ansible_user }}"
+    user: "vagrant"
+    state: present
+    key: "{{ item }}"
+  loop: "{{ keyList }}"
+
+...

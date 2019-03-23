@@ -1,0 +1,22 @@
+---
+
+memory: 6000
+cpus: 4
+
+# scale_memory: 1
+# scale_cpus: 1
+# sync_type: 'rsync'
+
+# cachier:
+#   mount_options: ['rw', 'vers=3', 'tcp', 'nolock']
+
+# ssh_forward_agent: True
+
+# domain: 'example.com'
+
+# # https://github.com/mitchellh/vagrant-google
+# google_project_id: "YOUR_GOOGLE_CLOUD_PROJECT_ID"
+# google_client_email: "YOUR_SERVICE_ACCOUNT_EMAIL_ADDRESS"
+# google_json_key_location: "/path/to/your/private-key.json"
+
+...
