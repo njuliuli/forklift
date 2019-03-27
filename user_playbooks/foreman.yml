@@ -1,6 +1,6 @@
 ---
 
-- hosts: all
+- hosts: foreman.local
   tasks:
     # - import_tasks: tasks/init.yml
     - import_tasks: tasks/mdns.yml
@@ -9,6 +9,40 @@
         keyList:
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCn3YR/UmQxq/4/mx//WcRpAYivqohIrsRCJJ5MhZgxu2vVEdDktaOEvCh8TTNhHXLlwq9LlZizPp85GGAMVuBJE0F7Ym9oW0rh3xsdoUney5gVDDptm8GgD+mSHAxlcrSvqgcDp4pJD7eHJEKuGLGHAxH+rlkB5fWih6v91IqAeH3D1BSGDPNzY5qb/1oyDFhWJ91sUlXuJKchMjx/lXgSuCxuFfKiZ6jECbTyiFuv/BQBzcbTzzIOjWzUaI6f1MdK1IQ3B+poaFePogJZC5CDmEQV7Zv7jmhCT7qDvYGkwSy7SWUVVNrHZmDChXmiOLFskqzSHcYcurBr5HSvVnDYoVNUOdZYEgo6VOeCRbnfB/EF4neJn36dC70OCkjzs+XWPVJqLQbUeKDS7ko0L5TaEz5hGjfpv5hUSwC9XtKHKMVcmx++cyHuIglIcMCqca08QfdzkJYRnWG2ZCQn5GnJjmogACXYLV4Xaoc/B4TdvGPXNt0B3Du1HYeHR8yGLa3gLY49W7t55wh31fzER6eOeIpxeDE8ek+QI6mG5+5NHLUGwL68FdE1WGQNM/D2lAaNmN7A67e8AKqG6S6kV5gL8eZB+0aHXLKeDMcn0hz8RoublVea1mc3AB4DqJxjE1K6TetFicWqIPpnk7gl0vNDEOIIOwOs7AzcKd4LruBL/Q== nju2005liuli@gmail.com"
           - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXWaXqikhqIYJ+k2SwSUS4bdSR3hiWEnGA7BzkLAuqhwLZX+ZIW98mCRAD39aECgOfJiWbcr/iZvb7Hfc/aSwQmRJ87gqdr7cVS9j68wDADuCvDskfwEUTS2RNL9eS/HleaJ3AKfXsoVUEhdmPO+PIzAkjao3G2s+ZYbHeEIw2aOMXX9k1zfLs3iqafDNi8RlJsBk9Fr9XggQkx4JtXHzDcj06cEVonXmUfNvNAlXjtxyluxe9/kKL2+j1opjkTxBs+BTMkXL/ovBMoeAo+PdFythMwgFCrHLxo3hodSsHC21BvJFgRJ4driVRoe1VkyTrLpjDDjMb+WBBUUtu0DXB li@apollo"
+
+
+# now only works for single foreman.local
+# it seems difficult to modulize for the way how id_rsa.pub is implmented
+- hosts: foreman.local
+  tasks:
+    - name: prepare user foreman to access QEMU host
+      become: true
+      become_user: "{{ foreman_user }}"
+      block:
+        - name: generate host key
+          command: "ssh-keygen -q -t rsa -f /usr/share/{{ foreman_user }}/.ssh/id_rsa     -N ''"
+          args:
+            # make sure not executing when already exist
+            creates: "/usr/share/{{ foreman_user }}/.ssh/id_rsa"
+        - name: copy id_rsa.pub to local machine
+          fetch:
+            src: "/usr/share/{{ foreman_user }}/.ssh/id_rsa.pub"
+            dest: "{{ key_path }}"
+            flat: yes
+      vars:
+        foreman_user: foreman
+        key_path: "/tmp/id_rsa.pub"
+
+
+- hosts: localhost
+  tasks:
+    - name: add foreman id_rsa.pub to apollo
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', key_path) }}"
+      vars:
+        key_path: "/tmp/id_rsa.pub"
 
 ...
 

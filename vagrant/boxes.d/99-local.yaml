@@ -9,17 +9,17 @@ test-debian:
     - foreman
 
   # box: debian9
-  # memory: 6000
-  # cpus: 4
+  memory: 6000
+  cpus: 4
   hostname: foreman
   networks:
     - type: 'public_network'
       options:
-        # ip: 192.168.1.11
+        ip: 192.168.1.11
         type: "bridge"
         dev: "br1"
-  ansible:
-    playbook: 'user_playbooks/foreman.yml'
+  # ansible:
+  #   playbook: 'user_playbooks/foreman.yml'
   #   group: 'devel'
   #   variables:
   #     katello_devel_github_username: <REPLACE ME>

@@ -5,3 +5,15 @@ boxes:
     pty:        true
     scenarios:
       - foreman
+
+    # customization below
+    # # seems broken the foreman-installer fqdn checking
+    # hostname: foreman
+    networks:
+      - type: 'public_network'
+        options:
+          ip: 192.168.1.11
+          type: "bridge"
+          dev: "br1"
+    ansible:
+      playbook: 'user_playbooks/foreman.yml'
