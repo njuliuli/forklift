@@ -15,5 +15,6 @@ boxes:
           ip: 192.168.1.11
           type: "bridge"
           dev: "br1"
-    ansible:
-      playbook: 'user_playbooks/foreman.yml'
+    # # seems not taking effect here
+    # ansible:
+    #   playbook: 'user_playbooks/foreman.yml'
